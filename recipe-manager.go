@@ -44,7 +44,7 @@ func viewMenu(menu *tabMenu, index *int) {
 	var input int
 
 	fmt.Printf("\nView Menu\n")
-	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search by Main Ingredient\n0. back\n")
+	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search by Main Ingredient\n0. Back\n")
 
 	fmt.Print("Choose Option: ")
 	fmt.Scanln(&input)
@@ -53,13 +53,42 @@ func viewMenu(menu *tabMenu, index *int) {
 	case 1:
 		viewAll(menu, index)
 	case 2:
-		fmt.Println("2")
+		sortMenu(menu, index)
 	case 3:
 		fmt.Println("3")
 	case 0:
 		mainMenu(menu, index)
 	default:
+		fmt.Println("Please input 1-3")
+		viewMenu(menu, index)
+	}
+}
+
+func sortMenu(menu *tabMenu, index *int) {
+	var input int
+
+	fmt.Printf("\nSort Menu\n")
+	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Category \n0. Back")
+
+	fmt.Print("Choose Option: ")
+	fmt.Scanln(&input)
+
+	switch input {
+	case 1:
+		fmt.Println("1")
+	case 2:
+		fmt.Println("2")
+	case 3:
+		fmt.Println("3")
+	case 4:
+		fmt.Println("4")
+	case 5:
+		fmt.Println("5")
+	case 0:
+		viewMenu(menu, index)
+	default:
 		fmt.Println("Please input 1-5")
+		sortMenu(menu, index)
 	}
 }
 

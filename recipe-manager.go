@@ -68,7 +68,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	var input int
 
 	fmt.Printf("\nSort Menu\n")
-	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Category \n0. Back")
+	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Category \n0. Back\n")
 
 	fmt.Print("Choose Option: ")
 	fmt.Scanln(&input)

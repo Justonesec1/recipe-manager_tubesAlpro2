@@ -94,7 +94,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	}
 }
 
-func sortAlphabet(menu *tabMenu, index *int) {
+func sortByName(menu *tabMenu, index *int) {
 	var sortIndex, minIndex int
 	var temp recipe
 

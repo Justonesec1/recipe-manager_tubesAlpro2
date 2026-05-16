@@ -346,6 +346,30 @@ func addTemplateRecipe(menu *tabMenu) {
 			"Fill tortilla",
 			"Serve tacos",
 		},
+
+	menu[5] = recipe{
+		name:            "Burrito",
+		mainIngredient:  "Beef",
+		difficulty:      "Medium",
+		region:          "Mexico",
+		duration:        25,
+		ingretientCount: 5,
+		rating:          4.5,
+		favorite:        false,
+		ingredients: [999]string{
+			"Tortilla",
+			"Beef",
+			"Lettuce",
+			"Cheese",
+			"Tomato",
+		},
+		steps: [999]string{
+			"Cook beef",
+			"Prepare vegetables",
+			"Heat tortilla",
+			"Put Ingredient",
+			"Wrap with Tortila",
+		},
 	}
 }
 

@@ -75,7 +75,7 @@ func sortMenu(menu *tabMenu, index *int) {
 
 	switch input {
 	case 1:
-		sortAlphabet(menu, index)
+		sortByName(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
 	case 2:
@@ -94,7 +94,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	}
 }
 
-func sortAlphabet(menu *tabMenu, index *int) {
+func sortByName(menu *tabMenu) {
 	var sortIndex, minIndex int
 	var temp recipe
 

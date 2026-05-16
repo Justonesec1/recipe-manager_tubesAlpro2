@@ -75,7 +75,9 @@ func sortMenu(menu *tabMenu, index *int) {
 
 	switch input {
 	case 1:
-		fmt.Println("1")
+		sortAlphabet(menu, index)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 2:
 		fmt.Println("2")
 	case 3:
@@ -90,6 +92,25 @@ func sortMenu(menu *tabMenu, index *int) {
 		fmt.Println("Please input 1-5")
 		sortMenu(menu, index)
 	}
+}
+
+func sortAlphabet(menu *tabMenu, index *int) {
+	var sortIndex, minIndex int
+	var temp recipe
+
+	for sortIndex = 0; menu[sortIndex].name != ""; sortIndex++ {
+		minIndex = sortIndex
+		for i := sortIndex; menu[i].name != ""; i++ {
+			if menu[i].name < menu[minIndex].name {
+				minIndex = i
+			}
+		}
+
+		temp = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = temp
+	}
+
 }
 
 // Meminta user menambah resep

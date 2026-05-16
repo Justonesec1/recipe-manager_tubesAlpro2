@@ -52,6 +52,7 @@ func viewMenu(menu *tabMenu, index *int) {
 	switch input {
 	case 1:
 		viewAll(menu, index)
+		viewMenu(menu, index)
 	case 2:
 		sortMenu(menu, index)
 	case 3:
@@ -83,7 +84,9 @@ func sortMenu(menu *tabMenu, index *int) {
 		viewAll(menu, index)
 		sortMenu(menu, index)
 	case 3:
-		fmt.Println("3")
+		sortByRating(menu)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 4:
 		fmt.Println("4")
 	case 5:
@@ -123,6 +126,24 @@ func sortByDuration(menu *tabMenu) {
 		minIndex = sortIndex
 		for i := sortIndex; menu[i].duration != 0; i++ {
 			if menu[i].duration < menu[minIndex].duration {
+				minIndex = i
+			}
+		}
+
+		temp = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = temp
+	}
+}
+
+func sortByRating(menu *tabMenu) {
+	var sortIndex, minIndex int
+	var temp recipe
+
+	for sortIndex = 0; menu[sortIndex].rating != 0; sortIndex++ {
+		minIndex = sortIndex
+		for i := sortIndex; menu[i].rating != 0; i++ {
+			if menu[i].rating < menu[minIndex].rating {
 				minIndex = i
 			}
 		}
@@ -198,8 +219,6 @@ func viewAll(menu *tabMenu, index *int) {
 		fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", i+1, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingretientCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
 		printIngredientsAndSteps(menu, i)
 	}
-
-	mainMenu(menu, index)
 }
 
 func addTemplateRecipe(menu *tabMenu) {

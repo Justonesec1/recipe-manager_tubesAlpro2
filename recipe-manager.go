@@ -79,7 +79,9 @@ func sortMenu(menu *tabMenu, index *int) {
 		viewAll(menu, index)
 		sortMenu(menu, index)
 	case 2:
-		fmt.Println("2")
+		sortByDuration(menu)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 3:
 		fmt.Println("3")
 	case 4:
@@ -111,6 +113,24 @@ func sortByName(menu *tabMenu) {
 		menu[minIndex] = temp
 	}
 
+}
+
+func sortByDuration(menu *tabMenu) {
+	var sortIndex, minIndex int
+	var temp recipe
+
+	for sortIndex = 0; menu[sortIndex].duration != 0; sortIndex++ {
+		minIndex = sortIndex
+		for i := sortIndex; menu[i].duration != 0; i++ {
+			if menu[i].duration < menu[minIndex].duration {
+				minIndex = i
+			}
+		}
+
+		temp = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = temp
+	}
 }
 
 // Meminta user menambah resep

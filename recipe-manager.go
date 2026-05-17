@@ -88,7 +88,9 @@ func sortMenu(menu *tabMenu, index *int) {
 		viewAll(menu, index)
 		sortMenu(menu, index)
 	case 4:
-		fmt.Println("4")
+		sortByDifficulty(menu)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 5:
 		fmt.Println("5")
 	case 0:
@@ -152,6 +154,42 @@ func sortByRating(menu *tabMenu) {
 		menu[sortIndex] = menu[minIndex]
 		menu[minIndex] = temp
 	}
+}
+
+func sortByDifficulty(menu *tabMenu) {
+
+	var tempRecipe recipe
+	var sortIndex, minIndex, tempInt int
+	var difficultyArr [999]int
+
+	for i := 0; menu[i].difficulty != ""; i++ {
+		switch menu[i].difficulty {
+		case "Easy":
+			difficultyArr[i] = 1
+		case "Medium":
+			difficultyArr[i] = 2
+		case "Hard":
+			difficultyArr[i] = 3
+		}
+	}
+
+	for sortIndex = 0; menu[sortIndex].difficulty != ""; sortIndex++ {
+		minIndex = sortIndex
+		for i := sortIndex; menu[i].difficulty != ""; i++ {
+			if difficultyArr[i] < difficultyArr[minIndex] {
+				minIndex = i
+			}
+		}
+
+		tempRecipe = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = tempRecipe
+
+		tempInt = difficultyArr[sortIndex]
+		difficultyArr[sortIndex] = difficultyArr[minIndex]
+		difficultyArr[minIndex] = tempInt
+	}
+
 }
 
 // Meminta user menambah resep

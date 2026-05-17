@@ -419,11 +419,20 @@ func printIngredientsAndSteps(menu *tabMenu, index int) {
 	fmt.Println("")
 }
 
+func checkInteger(menu tabMenu) int {
+	var i int
+	for i = 0; menu[i].name != ""; i++ {
+	}
+	return i + 1
+}
+
 func main() {
 	var menu tabMenu
-	var index int = 6
+	var index int
 
 	addTemplateRecipe(&menu)
+
+	index = checkInteger(menu)
 
 	mainMenu(&menu, &index)
 }

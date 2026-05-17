@@ -384,6 +384,7 @@ func addTemplateRecipe(menu *tabMenu) {
 			"Fill tortilla",
 			"Serve tacos",
 		},
+	}
 
 	menu[5] = recipe{
 		name:            "Burrito",

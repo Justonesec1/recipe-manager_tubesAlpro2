@@ -388,7 +388,7 @@ func addTemplateRecipe(menu *tabMenu) {
 
 	menu[5] = recipe{
 		name:            "Burrito",
-		mainIngredient:  "Beef",
+		mainIngredient:  "Meat",
 		difficulty:      "Medium",
 		region:          "Mexico",
 		duration:        25,

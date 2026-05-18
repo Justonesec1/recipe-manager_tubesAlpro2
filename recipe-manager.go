@@ -32,9 +32,9 @@ func mainMenu(menu *tabMenu, index *int) {
 	case 4:
 		fmt.Println("4")
 	case 0:
-		fmt.Println("5")
+		fmt.Println("-")
 	default:
-		fmt.Println("Please input 1-5")
+		fmt.Printf("\nPlease input 1-4 or 0!")
 		mainMenu(menu, index)
 	}
 }
@@ -65,11 +65,12 @@ func viewMenu(menu *tabMenu, index *int) {
 	}
 }
 
+// Menampilkan Interface Opsi Sort Menu
 func sortMenu(menu *tabMenu, index *int) {
 	var input int
 
 	fmt.Printf("\nSort Menu\n")
-	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Category \n0. Back\n")
+	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n0. Back\n")
 
 	fmt.Print("Choose Option: ")
 	fmt.Scanln(&input)
@@ -92,7 +93,9 @@ func sortMenu(menu *tabMenu, index *int) {
 		viewAll(menu, index)
 		sortMenu(menu, index)
 	case 5:
-		fmt.Println("5")
+		sortByRegion(menu)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 0:
 		viewMenu(menu, index)
 	default:
@@ -101,6 +104,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	}
 }
 
+// Menu Sorting Funcions
 func sortByName(menu *tabMenu) {
 	var sortIndex, minIndex int
 	var temp recipe
@@ -190,6 +194,28 @@ func sortByDifficulty(menu *tabMenu) {
 		difficultyArr[minIndex] = tempInt
 	}
 
+}
+
+func sortByRegion(menu *tabMenu) {
+	var sortIndex, minIndex int
+	var temp recipe
+
+	for sortIndex = 0; menu[sortIndex].region != ""; sortIndex++ {
+
+		minIndex = sortIndex
+
+		for i := sortIndex; menu[i].region != ""; i++ {
+
+			// Ascending alphabetical order
+			if menu[i].region < menu[minIndex].region {
+				minIndex = i
+			}
+		}
+
+		temp = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = temp
+	}
 }
 
 // Meminta user menambah resep

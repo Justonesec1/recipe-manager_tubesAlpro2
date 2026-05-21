@@ -20,7 +20,7 @@ func mainMenu(menu *tabMenu, index *int) {
 	fmt.Printf("1. View Menu\n2. Add Recipe\n3. Edit Recipe\n4. Delete Recipe\n0. Exit\n")
 
 	fmt.Print("Choose Option: ")
-	fmt.Scanln(&input)
+	fmt.Scan(&input)
 
 	switch input {
 	case 1:
@@ -47,7 +47,7 @@ func viewMenu(menu *tabMenu, index *int) {
 	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search by Main Ingredient\n0. Back\n")
 
 	fmt.Print("Choose Option: ")
-	fmt.Scanln(&input)
+	fmt.Scan(&input)
 
 	switch input {
 	case 1:
@@ -73,7 +73,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n0. Back\n")
 
 	fmt.Print("Choose Option: ")
-	fmt.Scanln(&input)
+	fmt.Scan(&input)
 
 	switch input {
 	case 1:
@@ -222,38 +222,56 @@ func sortByRegion(menu *tabMenu) {
 func addRecipe(menu *tabMenu, index *int) {
 
 	fmt.Printf("\nRecipe's Name: ")
-	fmt.Scanln(&menu[*index].name)
+	fmt.Scan(&menu[*index].name)
 
 	fmt.Print("Recipe's region : ")
-	fmt.Scanln(&menu[*index].region)
+	fmt.Scan(&menu[*index].region)
 
 	fmt.Print("Recipe's Main Ingredient: ")
-	fmt.Scanln(&menu[*index].mainIngredient)
+	fmt.Scan(&menu[*index].mainIngredient)
 
 	fmt.Print("Recipe's Ingredients : ")
-	fmt.Scanln(&menu[*index].ingredients[0]) //!!!!!! harus scan array
+	fmt.Scan(&menu[*index].ingredients[0]) //!!!!!! harus scan array
 
 	/*fmt.Print("Recipe's Ingredients Count : ")
-	fmt.Scanln(&menu[*index].ingredients)*/ //bisa otomatis harusnya
+	fmt.Scan(&menu[*index].ingredients)*/ //bisa otomatis harusnya
 
 	fmt.Print("Recipe's Steps : ")
-	fmt.Scanln(&menu[*index].steps[0]) //!!!!!! harus scan array
+	addSteps(menu, index)
 
 	fmt.Print("Recipe's Cook Duration : ")
-	fmt.Scanln(&menu[*index].duration)
+	fmt.Scan(&menu[*index].duration)
 
 	fmt.Print("Recipe's Difficluty : ")
-	fmt.Scanln(&menu[*index].difficulty)
+	fmt.Scan(&menu[*index].difficulty)
 
 	fmt.Print("Recipe's Rating : ")
-	fmt.Scanln(&menu[*index].rating)
+	fmt.Scan(&menu[*index].rating)
 
 	fmt.Print("Favorite? : ")
-	fmt.Scanln(&menu[*index].favorite)
+	fmt.Scan(&menu[*index].favorite)
 
 	*index++
 
 	mainMenu(menu, index)
+}
+
+func addSteps(menu *tabMenu, index *int) {
+	var input string
+	var stepsIndex int
+
+	fmt.Printf("\n\n")
+
+	for input != "." {
+		fmt.Scan(&input)
+
+		if input != "," && input != "." {
+			menu[*index].steps[stepsIndex] += input + " "
+		} else {
+			stepsIndex++
+		}
+
+	}
 }
 
 func editRecipe(menu *tabMenu, index *int) {
@@ -262,7 +280,7 @@ func editRecipe(menu *tabMenu, index *int) {
 
 	fmt.Print("Choose edited recipe")
 
-	fmt.Scanln(&edit)
+	fmt.Scan(&edit)
 
 	mainMenu(menu, index)
 }
@@ -270,7 +288,7 @@ func editRecipe(menu *tabMenu, index *int) {
 func deleteRecipe(menu *tabMenu, index *int) {
 	var deleteIndex int
 
-	fmt.Scanln(&deleteIndex)
+	fmt.Scan(&deleteIndex)
 
 	menu[deleteIndex] = menu[deleteIndex+1]
 
@@ -279,7 +297,7 @@ func deleteRecipe(menu *tabMenu, index *int) {
 
 func viewAll(menu *tabMenu, index *int) {
 	fmt.Printf("\n| No | Name                   | Main Ingredient | Region     | Ingredients     | Ingredients Count | Steps                         | Duration | Difficulty     | Rating |\n")
-	for i := 0; i < *index-1; i++ {
+	for i := 0; i < *index; i++ {
 		fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", i+1, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingretientCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
 		printIngredientsAndSteps(menu, i)
 	}
@@ -449,7 +467,7 @@ func checkInteger(menu tabMenu) int {
 	var i int
 	for i = 0; menu[i].name != ""; i++ {
 	}
-	return i + 1
+	return i
 }
 
 func main() {

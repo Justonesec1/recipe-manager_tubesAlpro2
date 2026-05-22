@@ -218,6 +218,7 @@ func sortByRegion(menu *tabMenu) {
 	}
 }
 
+// Add Recipe Functions
 // Meminta user menambah resep
 func addRecipe(menu *tabMenu, index *int) {
 
@@ -230,13 +231,11 @@ func addRecipe(menu *tabMenu, index *int) {
 	fmt.Print("Recipe's Main Ingredient: ")
 	fmt.Scan(&menu[*index].mainIngredient)
 
-	fmt.Print("Recipe's Ingredients : ")
-	fmt.Scan(&menu[*index].ingredients[0]) //!!!!!! harus scan array
+	addIngredients(menu, index)
 
 	/*fmt.Print("Recipe's Ingredients Count : ")
 	fmt.Scan(&menu[*index].ingredients)*/ //bisa otomatis harusnya
 
-	fmt.Print("Recipe's Steps : ")
 	addSteps(menu, index)
 
 	fmt.Print("Recipe's Cook Duration : ")
@@ -256,11 +255,31 @@ func addRecipe(menu *tabMenu, index *int) {
 	mainMenu(menu, index)
 }
 
+//Input Array Ingredients
+func addIngredients(menu *tabMenu, index *int) {
+	var input string
+	var ingredientsIndex int
+
+	fmt.Printf("\n\nPlease Input Recipe's Ingredients\nEnter ( , ) to add next step\nEnter ( . ) to end \n\n")
+
+	for input != "." {
+		fmt.Scan(&input)
+
+		if input != "," && input != "." {
+			menu[*index].ingredients[ingredientsIndex] += input + " "
+		} else {
+			ingredientsIndex++
+		}
+
+	}
+}
+
+// Input Array Steps
 func addSteps(menu *tabMenu, index *int) {
 	var input string
 	var stepsIndex int
 
-	fmt.Printf("\n\n")
+	fmt.Printf("\n\nPlease Input Recipe's Steps\nEnter ( , ) to add next step\nEnter ( . ) to end \n\n")
 
 	for input != "." {
 		fmt.Scan(&input)

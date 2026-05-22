@@ -5,7 +5,7 @@ import "fmt"
 type recipe struct {
 	name, mainIngredient, difficulty, region string
 	ingredients, steps                       [999]string
-	duration, ingretientCount                int
+	duration, ingredientsCount               int
 	rating                                   float64
 	favorite                                 bool
 }
@@ -233,8 +233,7 @@ func addRecipe(menu *tabMenu, index *int) {
 
 	addIngredients(menu, index)
 
-	/*fmt.Print("Recipe's Ingredients Count : ")
-	fmt.Scan(&menu[*index].ingredients)*/ //bisa otomatis harusnya
+	countIngredients(menu, index)
 
 	addSteps(menu, index)
 
@@ -293,6 +292,12 @@ func addSteps(menu *tabMenu, index *int) {
 	}
 }
 
+func countIngredients(menu *tabMenu, index *int) {
+	for i := 0; menu[*index].ingredients[i] != ""; i++ {
+		menu[*index].ingredientsCount++
+	}
+}
+
 func editRecipe(menu *tabMenu, index *int) {
 	var edit int
 	viewAll(menu, index)
@@ -317,21 +322,21 @@ func deleteRecipe(menu *tabMenu, index *int) {
 func viewAll(menu *tabMenu, index *int) {
 	fmt.Printf("\n| No | Name                   | Main Ingredient | Region     | Ingredients     | Ingredients Count | Steps                         | Duration | Difficulty     | Rating |\n")
 	for i := 0; i < *index; i++ {
-		fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", i+1, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingretientCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
+		fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", i+1, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingredientsCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
 		printIngredientsAndSteps(menu, i)
 	}
 }
 
 func addTemplateRecipe(menu *tabMenu) {
 	menu[0] = recipe{
-		name:            "Nasi Goreng",
-		mainIngredient:  "Rice",
-		difficulty:      "Easy",
-		region:          "Indonesia",
-		duration:        20,
-		ingretientCount: 5,
-		rating:          4.8,
-		favorite:        true,
+		name:             "Nasi Goreng",
+		mainIngredient:   "Rice",
+		difficulty:       "Easy",
+		region:           "Indonesia",
+		duration:         20,
+		ingredientsCount: 5,
+		rating:           4.8,
+		favorite:         true,
 		ingredients: [999]string{
 			"Rice",
 			"Egg",
@@ -349,14 +354,14 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 
 	menu[1] = recipe{
-		name:            "Sushi",
-		mainIngredient:  "Fish",
-		difficulty:      "Medium",
-		region:          "Japan",
-		duration:        45,
-		ingretientCount: 5,
-		rating:          4.9,
-		favorite:        true,
+		name:             "Sushi",
+		mainIngredient:   "Fish",
+		difficulty:       "Medium",
+		region:           "Japan",
+		duration:         45,
+		ingredientsCount: 5,
+		rating:           4.9,
+		favorite:         true,
 		ingredients: [999]string{
 			"Rice",
 			"Salmon",
@@ -374,14 +379,14 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 
 	menu[2] = recipe{
-		name:            "Spaghetti Carbonara",
-		mainIngredient:  "Pasta",
-		difficulty:      "Medium",
-		region:          "Italy",
-		duration:        30,
-		ingretientCount: 5,
-		rating:          4.7,
-		favorite:        false,
+		name:             "Spaghetti Carbonara",
+		mainIngredient:   "Pasta",
+		difficulty:       "Medium",
+		region:           "Italy",
+		duration:         30,
+		ingredientsCount: 5,
+		rating:           4.7,
+		favorite:         false,
 		ingredients: [999]string{
 			"Spaghetti",
 			"Egg",
@@ -399,14 +404,14 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 
 	menu[3] = recipe{
-		name:            "Tom Yum",
-		mainIngredient:  "Shrimp",
-		difficulty:      "Hard",
-		region:          "Thailand",
-		duration:        40,
-		ingretientCount: 6,
-		rating:          4.6,
-		favorite:        true,
+		name:             "Tom Yum",
+		mainIngredient:   "Shrimp",
+		difficulty:       "Hard",
+		region:           "Thailand",
+		duration:         40,
+		ingredientsCount: 6,
+		rating:           4.6,
+		favorite:         true,
 		ingredients: [999]string{
 			"Shrimp",
 			"Mushroom",
@@ -425,14 +430,14 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 
 	menu[4] = recipe{
-		name:            "Tacos",
-		mainIngredient:  "Beef",
-		difficulty:      "Easy",
-		region:          "Mexico",
-		duration:        25,
-		ingretientCount: 5,
-		rating:          4.5,
-		favorite:        false,
+		name:             "Tacos",
+		mainIngredient:   "Beef",
+		difficulty:       "Easy",
+		region:           "Mexico",
+		duration:         25,
+		ingredientsCount: 5,
+		rating:           4.5,
+		favorite:         false,
 		ingredients: [999]string{
 			"Tortilla",
 			"Beef",
@@ -450,14 +455,14 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 
 	menu[5] = recipe{
-		name:            "Burrito",
-		mainIngredient:  "Meat",
-		difficulty:      "Medium",
-		region:          "Mexico",
-		duration:        25,
-		ingretientCount: 5,
-		rating:          4.5,
-		favorite:        false,
+		name:             "Burrito",
+		mainIngredient:   "Meat",
+		difficulty:       "Medium",
+		region:           "Mexico",
+		duration:         25,
+		ingredientsCount: 5,
+		rating:           4.5,
+		favorite:         false,
 		ingredients: [999]string{
 			"Tortilla",
 			"Beef",

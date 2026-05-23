@@ -299,12 +299,58 @@ func countIngredients(menu *tabMenu, index *int) {
 }
 
 func editRecipe(menu *tabMenu, index *int) {
-	var edit int
+	var edit, option int
+
 	viewAll(menu, index)
 
-	fmt.Print("Choose edited recipe")
-
+	fmt.Print("Choose edited recipe: ")
 	fmt.Scan(&edit)
+
+	for edit > *index-1 || edit == 0 {
+		fmt.Println("No Recipe Selected. Please Try Again")
+		fmt.Print("Choose edited recipe: ")
+		fmt.Scan(&edit)
+	}
+
+	edit -= 1
+
+	fmt.Println("Choose what to edit")
+	fmt.Printf("1. Name\n2. Main Ingredient\n3. Region\n4. Ingredients\n5. Steps\n6. Duration\n7. Difficulty\n8. Rating\n0. Back\n")
+	fmt.Print("Choose option: ")
+	fmt.Scan(&option)
+
+	switch option {
+	case 1:
+		fmt.Print("New Name: ")
+		fmt.Scan(&menu[edit].name)
+	case 2:
+		fmt.Print("New Main Ingredient: ")
+		fmt.Scan(&menu[edit].mainIngredient)
+	case 3:
+		fmt.Print("New Region: ")
+		fmt.Scan(&menu[edit].region)
+	case 4:
+		menu[edit].ingredients = [999]string{}
+		menu[edit].ingredientsCount = 0
+		addIngredients(menu, &edit)
+		countIngredients(menu, &edit)
+	case 5:
+		menu[edit].steps = [999]string{}
+		addSteps(menu, &edit)
+	case 6:
+		fmt.Print("New Duration: ")
+		fmt.Scan(&menu[edit].duration)
+	case 7:
+		fmt.Print("New Difficulty: ")
+		fmt.Scan(&menu[edit].difficulty)
+	case 8:
+		fmt.Print("New Rating: ")
+		fmt.Scan(&menu[edit].rating)
+	case 0:
+	default:
+		fmt.Print("Please input 0-8")
+		editRecipe(menu, index)
+	}
 
 	mainMenu(menu, index)
 }

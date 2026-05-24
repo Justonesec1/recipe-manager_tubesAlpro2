@@ -30,7 +30,7 @@ func mainMenu(menu *tabMenu, index *int) {
 	case 3:
 		editRecipe(menu, index)
 	case 4:
-		fmt.Println("4")
+		deleteRecipe(menu, index)
 	case 0:
 		fmt.Println("-")
 	default:
@@ -358,10 +358,26 @@ func editRecipe(menu *tabMenu, index *int) {
 func deleteRecipe(menu *tabMenu, index *int) {
 	var deleteIndex int
 
+	viewAll(menu, index)
+
+	fmt.Print("Choose Recipe to Delete: ")
 	fmt.Scan(&deleteIndex)
 
-	menu[deleteIndex] = menu[deleteIndex+1]
+	for deleteIndex > *index-1 || deleteIndex == 0 {
+		fmt.Println("No Recipe Selected. Please Try Again")
+		fmt.Print("Choose Recipe to Delete: ")
+		fmt.Scan(&deleteIndex)
+	}
 
+	deleteIndex -= 1
+
+	menu[deleteIndex] = recipe{}
+
+	for i := deleteIndex + 1; menu[i].name != ""; i++ {
+		menu[i-1] = menu[i]
+	}
+
+	*index--
 	mainMenu(menu, index)
 }
 

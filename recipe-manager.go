@@ -360,10 +360,16 @@ func deleteRecipe(menu *tabMenu, index *int) {
 
 	viewAll(menu, index)
 
+	if *index == 0 {
+		fmt.Println("\nNo Recipe Stored")
+		mainMenu(menu, index)
+		return
+	}
+
 	fmt.Print("Choose Recipe to Delete: ")
 	fmt.Scan(&deleteIndex)
 
-	for deleteIndex > *index-1 || deleteIndex == 0 {
+	for deleteIndex > *index || deleteIndex == 0 {
 		fmt.Println("No Recipe Selected. Please Try Again")
 		fmt.Print("Choose Recipe to Delete: ")
 		fmt.Scan(&deleteIndex)
@@ -371,13 +377,16 @@ func deleteRecipe(menu *tabMenu, index *int) {
 
 	deleteIndex -= 1
 
-	menu[deleteIndex] = recipe{}
-
-	for i := deleteIndex + 1; menu[i].name != ""; i++ {
-		menu[i-1] = menu[i]
+	for i := deleteIndex; i < *index-1; i++ {
+		menu[i] = menu[i+1]
 	}
 
-	*index--
+	menu[*index-1] = recipe{}
+
+	(*index)--
+
+	fmt.Println("Recipe deleted successfully!")
+
 	mainMenu(menu, index)
 }
 

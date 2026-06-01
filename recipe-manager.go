@@ -56,7 +56,8 @@ func viewMenu(menu *tabMenu, index *int) {
 	case 2:
 		sortMenu(menu, index)
 	case 3:
-		fmt.Println("3")
+		searchByMainIngredient(menu, index)
+		viewMenu(menu, index)
 	case 0:
 		mainMenu(menu, index)
 	default:
@@ -295,6 +296,41 @@ func addSteps(menu *tabMenu, index *int) {
 func countIngredients(menu *tabMenu, index *int) {
 	for i := 0; menu[*index].ingredients[i] != ""; i++ {
 		menu[*index].ingredientsCount++
+	}
+}
+
+func searchByMainIngredient(menu *tabMenu, index *int) {
+	var ingredient string
+	var found bool
+
+	fmt.Print("\nInput Main Ingredient: ")
+	fmt.Scan(&ingredient)
+
+	fmt.Printf("\nSearch Result for \"%s\"\n", ingredient)
+	fmt.Printf("| No | Name                   | Main Ingredient | Region     | Ingredients     | Ingredients Count | Steps                         | Duration | Difficulty     | Rating |\n")
+
+	for i := 0; i < *index; i++ {
+		if menu[i].mainIngredient == ingredient {
+			found = true
+
+			fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n",
+				i+1,
+				menu[i].name,
+				menu[i].mainIngredient,
+				menu[i].region,
+				menu[i].ingredients[0],
+				menu[i].ingredientsCount,
+				menu[i].steps[0],
+				menu[i].duration,
+				menu[i].difficulty,
+				menu[i].rating)
+
+			printIngredientsAndSteps(menu, i)
+		}
+	}
+
+	if !found {
+		fmt.Println("No recipes found with that main ingredient.")
 	}
 }
 

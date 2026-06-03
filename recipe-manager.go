@@ -266,30 +266,33 @@ func addRecipe(menu *tabMenu, index *int) {
 
 	addSteps(menu, index)
 
-	fmt.Print("Recipe's Cook Duration : ")
-	fmt.Scan(&menu[*index].duration)
+	for menu[*index].duration <= 0 {
+		fmt.Print("Recipe's Cook Duration (minutes) : ")
+		fmt.Scan(&menu[*index].duration)
 
-	fmt.Print("Recipe's Difficluty : ")
-	fmt.Scan(&menu[*index].difficulty)
-
-		if menu[*index].difficulty != "Easy" &&
-			menu[*index].difficulty != "Medium" &&
-			menu[*index].difficulty != "Hard" {
-
-			fmt.Println("Please enter Easy, Medium, or Hard.")
+		if menu[*index].duration <= 0 {
+			fmt.Println("Duration must be greater than 0.")
 			fmt.Println()
 		}
 	}
 
-	for {
+	fmt.Print("Recipe's Difficluty : ")
+	fmt.Scan(&menu[*index].difficulty)
+
+	if menu[*index].difficulty != "Easy" && menu[*index].difficulty != "Medium" && menu[*index].difficulty != "Hard" {
+
+		fmt.Println("Please enter Easy, Medium, or Hard.")
+		fmt.Println()
+	}
+
+	for menu[*index].rating <= 0 && menu[*index].rating >= 5 {
+
 		fmt.Print("Recipe's Rating (0-5): ")
 		fmt.Scan(&menu[*index].rating)
 
-		if menu[*index].rating >= 0 && menu[*index].rating <= 5 {
-			break
+		if menu[*index].rating <= 0 && menu[*index].rating >= 5 {
+			fmt.Println("Rating must be between 0 and 5.")
 		}
-
-		fmt.Println("Rating must be between 0 and 5.")
 	}
 
 	fmt.Print("Favorite? (true/false): ")
@@ -795,7 +798,7 @@ func addTemplateRecipe(menu *tabMenu) {
 		name:             "Cheeseburger",
 		mainIngredient:   "Beef",
 		difficulty:       "Easy",
-		region:           "United States",
+		region:           "US",
 		duration:         20,
 		ingredientsCount: 5,
 		rating:           4.3,

@@ -248,12 +248,15 @@ func sortByMainIngredient(menu *tabMenu) {
 // Meminta user menambah resep
 func addRecipe(menu *tabMenu, index *int) {
 
+	fmt.Println("Input string. Type ( . ) to end")
 	fmt.Printf("\nRecipe's Name: ")
-	fmt.Scan(&menu[*index].name)
+	menu[*index].name = inputString()
 
+	fmt.Println("Input string. Press {enter} to end")
 	fmt.Print("Recipe's region : ")
 	fmt.Scan(&menu[*index].region)
 
+	fmt.Println("Input string. Press {enter} to end")
 	fmt.Print("Recipe's Main Ingredient: ")
 	fmt.Scan(&menu[*index].mainIngredient)
 
@@ -263,22 +266,11 @@ func addRecipe(menu *tabMenu, index *int) {
 
 	addSteps(menu, index)
 
-	for menu[*index].duration <= 0 {
-		fmt.Print("Recipe's Cook Duration (minutes) : ")
-		fmt.Scan(&menu[*index].duration)
+	fmt.Print("Recipe's Cook Duration : ")
+	fmt.Scan(&menu[*index].duration)
 
-		if menu[*index].duration <= 0 {
-			fmt.Println("Duration must be greater than 0.")
-			fmt.Println()
-		}
-	}
-
-	for menu[*index].difficulty != "Easy" &&
-		menu[*index].difficulty != "Medium" &&
-		menu[*index].difficulty != "Hard" {
-
-		fmt.Print("Recipe's Difficulty (Easy/Medium/Hard): ")
-		fmt.Scan(&menu[*index].difficulty)
+	fmt.Print("Recipe's Difficluty : ")
+	fmt.Scan(&menu[*index].difficulty)
 
 		if menu[*index].difficulty != "Easy" &&
 			menu[*index].difficulty != "Medium" &&
@@ -306,6 +298,42 @@ func addRecipe(menu *tabMenu, index *int) {
 	(*index)++
 
 	mainMenu(menu, index)
+}
+
+func inputString() string {
+	var input, result string
+
+	for input != "." {
+		fmt.Scan(&input)
+		if input != "." {
+			result += input + " "
+		}
+	}
+
+	return result
+
+}
+
+func chooseDifficulty() string {
+	var input int
+
+	fmt.Println("1. Easy")
+	fmt.Println("2. Medium")
+	fmt.Println("3. Hard")
+	fmt.Print("Choose: ")
+	fmt.Scan(&input)
+
+	switch input {
+	case 1:
+		return "Easy"
+	case 2:
+		return "Medium"
+	case 3:
+		return "Hard"
+	default:
+		return chooseDifficulty()
+	}
+
 }
 
 //Input Array Ingredients
@@ -436,7 +464,7 @@ func editRecipe(menu *tabMenu, index *int) {
 	switch option {
 	case 1:
 		fmt.Print("New Name: ")
-		fmt.Scan(&menu[edit].name)
+		menu[edit].name = inputString()
 	case 2:
 		fmt.Print("New Main Ingredient: ")
 		fmt.Scan(&menu[edit].mainIngredient)

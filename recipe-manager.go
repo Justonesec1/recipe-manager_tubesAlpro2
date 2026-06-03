@@ -71,7 +71,7 @@ func sortMenu(menu *tabMenu, index *int) {
 	var input int
 
 	fmt.Printf("\nSort Menu\n")
-	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n0. Back\n")
+	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n6. Sort by Main Ingredient \n0. Back\n")
 
 	fmt.Print("Choose Option: ")
 	fmt.Scan(&input)
@@ -97,10 +97,14 @@ func sortMenu(menu *tabMenu, index *int) {
 		sortByRegion(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
+	case 6:
+		sortByMainIngredient(menu)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case 0:
 		viewMenu(menu, index)
 	default:
-		fmt.Println("Please input 1-5")
+		fmt.Println("Please input 1-6")
 		sortMenu(menu, index)
 	}
 }
@@ -219,6 +223,27 @@ func sortByRegion(menu *tabMenu) {
 	}
 }
 
+func sortByMainIngredient(menu *tabMenu) {
+	var sortIndex, minIndex int
+	var temp recipe
+
+	for sortIndex = 0; menu[sortIndex].mainIngredient != ""; sortIndex++ {
+
+		minIndex = sortIndex
+
+		for i := sortIndex; menu[i].mainIngredient != ""; i++ {
+
+			if menu[i].mainIngredient < menu[minIndex].mainIngredient || (menu[i].mainIngredient == menu[minIndex].mainIngredient && menu[i].name < menu[minIndex].name) {
+				minIndex = i
+			}
+		}
+
+		temp = menu[sortIndex]
+		menu[sortIndex] = menu[minIndex]
+		menu[minIndex] = temp
+	}
+}
+
 // Add Recipe Functions
 // Meminta user menambah resep
 func addRecipe(menu *tabMenu, index *int) {
@@ -238,19 +263,47 @@ func addRecipe(menu *tabMenu, index *int) {
 
 	addSteps(menu, index)
 
-	fmt.Print("Recipe's Cook Duration : ")
-	fmt.Scan(&menu[*index].duration)
+	for menu[*index].duration <= 0 {
+		fmt.Print("Recipe's Cook Duration (minutes) : ")
+		fmt.Scan(&menu[*index].duration)
 
-	fmt.Print("Recipe's Difficluty : ")
-	fmt.Scan(&menu[*index].difficulty)
+		if menu[*index].duration <= 0 {
+			fmt.Println("Duration must be greater than 0.")
+			fmt.Println()
+		}
+	}
 
-	fmt.Print("Recipe's Rating : ")
-	fmt.Scan(&menu[*index].rating)
+	for menu[*index].difficulty != "Easy" &&
+		menu[*index].difficulty != "Medium" &&
+		menu[*index].difficulty != "Hard" {
 
-	fmt.Print("Favorite? : ")
+		fmt.Print("Recipe's Difficulty (Easy/Medium/Hard): ")
+		fmt.Scan(&menu[*index].difficulty)
+
+		if menu[*index].difficulty != "Easy" &&
+			menu[*index].difficulty != "Medium" &&
+			menu[*index].difficulty != "Hard" {
+
+			fmt.Println("Please enter Easy, Medium, or Hard.")
+			fmt.Println()
+		}
+	}
+
+	for {
+		fmt.Print("Recipe's Rating (0-5): ")
+		fmt.Scan(&menu[*index].rating)
+
+		if menu[*index].rating >= 0 && menu[*index].rating <= 5 {
+			break
+		}
+
+		fmt.Println("Rating must be between 0 and 5.")
+	}
+
+	fmt.Print("Favorite? (true/false): ")
 	fmt.Scan(&menu[*index].favorite)
 
-	*index++
+	(*index)++
 
 	mainMenu(menu, index)
 }
@@ -303,6 +356,8 @@ func searchByMainIngredient(menu *tabMenu, index *int) {
 	var ingredient string
 	var found bool
 
+	showAvailableIngredients(menu, index)
+
 	fmt.Print("\nInput Main Ingredient: ")
 	fmt.Scan(&ingredient)
 
@@ -334,6 +389,29 @@ func searchByMainIngredient(menu *tabMenu, index *int) {
 	}
 }
 
+func showAvailableIngredients(menu *tabMenu, index *int) {
+	var found bool
+	var count int
+
+	fmt.Println("\nAvailable Main Ingredients:")
+
+	for i := 0; i < *index; i++ {
+
+		found = false
+
+		for j := 0; j < i; j++ {
+			if menu[i].mainIngredient == menu[j].mainIngredient {
+				found = true
+			}
+		}
+
+		if !found {
+			count++
+			fmt.Printf("%d. %s\n", count, menu[i].mainIngredient)
+		}
+	}
+}
+
 func editRecipe(menu *tabMenu, index *int) {
 	var edit, option int
 
@@ -342,7 +420,7 @@ func editRecipe(menu *tabMenu, index *int) {
 	fmt.Print("Choose edited recipe: ")
 	fmt.Scan(&edit)
 
-	for edit > *index-1 || edit == 0 {
+	for edit > *index || edit == 0 {
 		fmt.Println("No Recipe Selected. Please Try Again")
 		fmt.Print("Choose edited recipe: ")
 		fmt.Scan(&edit)
@@ -563,7 +641,7 @@ func addTemplateRecipe(menu *tabMenu) {
 
 	menu[5] = recipe{
 		name:             "Burrito",
-		mainIngredient:   "Meat",
+		mainIngredient:   "Beef",
 		difficulty:       "Medium",
 		region:           "Mexico",
 		duration:         25,
@@ -583,6 +661,130 @@ func addTemplateRecipe(menu *tabMenu) {
 			"Heat tortilla",
 			"Put Ingredient",
 			"Wrap with Tortila",
+		},
+	}
+	menu[6] = recipe{
+		name:             "Sushi",
+		mainIngredient:   "Fish",
+		difficulty:       "Hard",
+		region:           "Japan",
+		duration:         40,
+		ingredientsCount: 5,
+		rating:           4.8,
+		favorite:         true,
+		ingredients: [999]string{
+			"Rice",
+			"Salmon",
+			"Nori",
+			"Vinegar",
+			"Cucumber",
+		},
+		steps: [999]string{
+			"Cook rice",
+			"Season rice with vinegar",
+			"Prepare salmon",
+			"Place nori on mat",
+			"Roll and slice sushi",
+		},
+	}
+
+	menu[7] = recipe{
+		name:             "Spaghetti Carbonara",
+		mainIngredient:   "Pasta",
+		difficulty:       "Easy",
+		region:           "Italy",
+		duration:         20,
+		ingredientsCount: 5,
+		rating:           4.6,
+		favorite:         true,
+		ingredients: [999]string{
+			"Spaghetti",
+			"Egg",
+			"Parmesan",
+			"Bacon",
+			"Black Pepper",
+		},
+		steps: [999]string{
+			"Boil spaghetti",
+			"Cook bacon",
+			"Mix egg and cheese",
+			"Combine with pasta",
+			"Add pepper and serve",
+		},
+	}
+
+	menu[8] = recipe{
+		name:             "Nasi Goreng",
+		mainIngredient:   "Rice",
+		difficulty:       "Easy",
+		region:           "Indonesia",
+		duration:         15,
+		ingredientsCount: 5,
+		rating:           4.7,
+		favorite:         true,
+		ingredients: [999]string{
+			"Rice",
+			"Egg",
+			"Garlic",
+			"Soy Sauce",
+			"Chicken",
+		},
+		steps: [999]string{
+			"Heat oil",
+			"Saute garlic",
+			"Add chicken and egg",
+			"Add rice and soy sauce",
+			"Stir fry and serve",
+		},
+	}
+
+	menu[9] = recipe{
+		name:             "Chicken Curry",
+		mainIngredient:   "Chicken",
+		difficulty:       "Medium",
+		region:           "India",
+		duration:         35,
+		ingredientsCount: 5,
+		rating:           4.4,
+		favorite:         false,
+		ingredients: [999]string{
+			"Chicken",
+			"Onion",
+			"Curry Powder",
+			"Tomato",
+			"Coconut Milk",
+		},
+		steps: [999]string{
+			"Cook onions",
+			"Add chicken",
+			"Mix in curry powder",
+			"Add tomato and coconut milk",
+			"Simmer until cooked",
+		},
+	}
+
+	menu[10] = recipe{
+		name:             "Cheeseburger",
+		mainIngredient:   "Beef",
+		difficulty:       "Easy",
+		region:           "United States",
+		duration:         20,
+		ingredientsCount: 5,
+		rating:           4.3,
+		favorite:         false,
+		ingredients: [999]string{
+			"Burger Bun",
+			"Beef Patty",
+			"Cheese",
+			"Lettuce",
+			"Tomato",
+		},
+		steps: [999]string{
+			"Cook beef patty",
+			"Toast buns",
+			"Melt cheese on patty",
+			"Assemble ingredients",
+			"Serve burger",
 		},
 	}
 }

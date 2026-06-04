@@ -12,26 +12,57 @@ type recipe struct {
 
 type tabMenu [999]recipe
 
+// Meminta masukkan input dengan range valid
+func inputRange(a, b string) string {
+	var input string
+
+	for {
+		fmt.Printf("Choose Option (%s-%s): ", a, b)
+		fmt.Scan(&input)
+
+		if input >= a && input <= b && len(input) == 1 {
+			return input
+		} else {
+			fmt.Printf("Please input (%s-%s)\n\n", a, b)
+		}
+	}
+}
+
+// Meminta user memasukkan input string
+func inputString() string {
+	var input, result string
+
+	for input != "." {
+		fmt.Scan(&input)
+		if input != "." {
+			result += input + " "
+		}
+	}
+
+	return result
+
+}
+
 // Menampilkan Interface Main Menu
 func mainMenu(menu *tabMenu, index *int) {
-	var input int
+	var input string
 
 	fmt.Printf("\nMenu Manager Application\n")
 	fmt.Printf("1. View Menu\n2. Add Recipe\n3. Edit Recipe\n4. Delete Recipe\n0. Exit\n")
 
-	fmt.Print("Choose Option: ")
-	fmt.Scan(&input)
+	input = inputRange("0", "4")
 
 	switch input {
-	case 1:
+	case "1":
 		viewMenu(menu, index)
-	case 2:
+	case "2":
 		addRecipe(menu, index)
-	case 3:
+	case "3":
+		viewAll(menu, index)
 		editRecipe(menu, index)
-	case 4:
+	case "4":
 		deleteRecipe(menu, index)
-	case 0:
+	case "0":
 		fmt.Println("-")
 	default:
 		fmt.Printf("\nPlease input 1-4 or 0!")
@@ -41,70 +72,75 @@ func mainMenu(menu *tabMenu, index *int) {
 
 // Menampilkan Interface View Menu
 func viewMenu(menu *tabMenu, index *int) {
-	var input int
+	var input string
 
 	fmt.Printf("\nView Menu\n")
 	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search by Main Ingredient\n0. Back\n")
 
-	fmt.Print("Choose Option: ")
-	fmt.Scan(&input)
+	input = inputRange("0", "3")
+
+	for input != "0" && input != "1" && input != "2" && input != "3" {
+		fmt.Println("Please input 0-3")
+
+		fmt.Print("Choose Option: ")
+		fmt.Scan(&input)
+	}
 
 	switch input {
-	case 1:
+	case "1":
 		viewAll(menu, index)
 		viewMenu(menu, index)
-	case 2:
+	case "2":
 		sortMenu(menu, index)
-	case 3:
+	case "3":
 		searchByMainIngredient(menu, index)
 		viewMenu(menu, index)
-	case 0:
+	case "0":
 		mainMenu(menu, index)
 	default:
-		fmt.Println("Please input 1-3")
+		fmt.Println("Please input 0-3")
 		viewMenu(menu, index)
 	}
 }
 
 // Menampilkan Interface Opsi Sort Menu
 func sortMenu(menu *tabMenu, index *int) {
-	var input int
+	var input string
 
 	fmt.Printf("\nSort Menu\n")
 	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n6. Sort by Main Ingredient \n0. Back\n")
 
-	fmt.Print("Choose Option: ")
-	fmt.Scan(&input)
+	input = inputRange("0", "6")
 
 	switch input {
-	case 1:
+	case "1":
 		sortByName(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 2:
+	case "2":
 		sortByDuration(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 3:
+	case "3":
 		sortByRating(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 4:
+	case "4":
 		sortByDifficulty(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 5:
+	case "5":
 		sortByRegion(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 6:
+	case "6":
 		sortByMainIngredient(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
-	case 0:
+	case "0":
 		viewMenu(menu, index)
 	default:
-		fmt.Println("Please input 1-6")
+		fmt.Println("Please input 0-6")
 		sortMenu(menu, index)
 	}
 }
@@ -248,17 +284,17 @@ func sortByMainIngredient(menu *tabMenu) {
 // Meminta user menambah resep
 func addRecipe(menu *tabMenu, index *int) {
 
-	fmt.Println("Input string. Type ( . ) to end")
+	fmt.Printf("\nInput string. Type ( . ) to end")
 	fmt.Printf("\nRecipe's Name: ")
 	menu[*index].name = inputString()
 
-	fmt.Println("Input string. Press {enter} to end")
-	fmt.Print("Recipe's region : ")
-	fmt.Scan(&menu[*index].region)
+	fmt.Printf("\nInput string. Type ( . ) to end")
+	fmt.Printf("\nRecipe's region : ")
+	menu[*index].region = inputString()
 
-	fmt.Println("Input string. Press {enter} to end")
-	fmt.Print("Recipe's Main Ingredient: ")
-	fmt.Scan(&menu[*index].mainIngredient)
+	fmt.Printf("\nInput string. Type ( . ) to end")
+	fmt.Printf("\nRecipe's Main Ingredient: ")
+	menu[*index].mainIngredient = inputString()
 
 	addIngredients(menu, index)
 
@@ -267,7 +303,8 @@ func addRecipe(menu *tabMenu, index *int) {
 	addSteps(menu, index)
 
 	for menu[*index].duration <= 0 {
-		fmt.Print("Recipe's Cook Duration (minutes) : ")
+		fmt.Printf("\nInput Integer.")
+		fmt.Printf("\nRecipe's Cook Duration (minutes) : ")
 		fmt.Scan(&menu[*index].duration)
 
 		if menu[*index].duration <= 0 {
@@ -276,65 +313,67 @@ func addRecipe(menu *tabMenu, index *int) {
 		}
 	}
 
-	fmt.Print("Recipe's Difficluty : ")
-	fmt.Scan(&menu[*index].difficulty)
+	fmt.Printf("\nRecipe's Difficluty :\n")
+	menu[*index].difficulty = chooseDifficulty()
 
-	if menu[*index].difficulty != "Easy" && menu[*index].difficulty != "Medium" && menu[*index].difficulty != "Hard" {
-
-		fmt.Println("Please enter Easy, Medium, or Hard.")
-		fmt.Println()
-	}
-
-	for menu[*index].rating <= 0 && menu[*index].rating >= 5 {
-
-		fmt.Print("Recipe's Rating (0-5): ")
+	menu[*index].rating = -1
+	for menu[*index].rating < 0 || menu[*index].rating > 5 {
+		fmt.Printf("\nInput Real Numbers.")
+		fmt.Printf("\nRecipe's Rating (0-5): ")
 		fmt.Scan(&menu[*index].rating)
 
 		if menu[*index].rating <= 0 && menu[*index].rating >= 5 {
-			fmt.Println("Rating must be between 0 and 5.")
+			fmt.Printf("\nRating must be between 0 and 5.")
 		}
 	}
 
-	fmt.Print("Favorite? (true/false): ")
-	fmt.Scan(&menu[*index].favorite)
+	fmt.Printf("\nMark Recipe as Favorite? \n")
+	menu[*index].favorite = favorite()
 
 	(*index)++
 
 	mainMenu(menu, index)
 }
 
-func inputString() string {
-	var input, result string
-
-	for input != "." {
-		fmt.Scan(&input)
-		if input != "." {
-			result += input + " "
-		}
-	}
-
-	return result
-
-}
-
+// Meminta user untuk memilih difficulty resep
 func chooseDifficulty() string {
-	var input int
+	var input string
 
 	fmt.Println("1. Easy")
 	fmt.Println("2. Medium")
 	fmt.Println("3. Hard")
-	fmt.Print("Choose: ")
-	fmt.Scan(&input)
+
+	input = inputRange("1", "3")
 
 	switch input {
-	case 1:
+	case "1":
 		return "Easy"
-	case 2:
+	case "2":
 		return "Medium"
-	case 3:
+	case "3":
 		return "Hard"
 	default:
 		return chooseDifficulty()
+	}
+
+}
+
+// Meminta user untuk memilih faoritkan resep
+func favorite() bool {
+	var input string
+
+	fmt.Println("1. Yes")
+	fmt.Println("2. No")
+
+	input = inputRange("1", "2")
+
+	switch input {
+	case "1":
+		return true
+	case "2":
+		return false
+	default:
+		return favorite()
 	}
 
 }
@@ -344,7 +383,7 @@ func addIngredients(menu *tabMenu, index *int) {
 	var input string
 	var ingredientsIndex int
 
-	fmt.Printf("\n\nPlease Input Recipe's Ingredients\nEnter ( , ) to add next step\nEnter ( . ) to end \n\n")
+	fmt.Printf("\nPlease Input Recipe's Ingredients\nType ( , ) to add next ingredient\nType ( . ) to end \n\n")
 
 	for input != "." {
 		fmt.Scan(&input)
@@ -363,7 +402,7 @@ func addSteps(menu *tabMenu, index *int) {
 	var input string
 	var stepsIndex int
 
-	fmt.Printf("\n\nPlease Input Recipe's Steps\nEnter ( , ) to add next step\nEnter ( . ) to end \n\n")
+	fmt.Printf("\nPlease Input Recipe's Steps\nEnter ( , ) to add next step\nEnter ( . ) to end \n\n")
 
 	for input != "." {
 		fmt.Scan(&input)
@@ -377,6 +416,7 @@ func addSteps(menu *tabMenu, index *int) {
 	}
 }
 
+// Menghitung jumlah bahan yang diperlukan
 func countIngredients(menu *tabMenu, index *int) {
 	for i := 0; menu[*index].ingredients[i] != ""; i++ {
 		menu[*index].ingredientsCount++
@@ -443,15 +483,15 @@ func showAvailableIngredients(menu *tabMenu, index *int) {
 	}
 }
 
+// Meminta user mengedit resep
 func editRecipe(menu *tabMenu, index *int) {
-	var edit, option int
-
-	viewAll(menu, index)
+	var edit int
+	var option string
 
 	fmt.Print("Choose edited recipe: ")
 	fmt.Scan(&edit)
 
-	for edit > *index || edit == 0 {
+	for edit > *index || edit <= 0 {
 		fmt.Println("No Recipe Selected. Please Try Again")
 		fmt.Print("Choose edited recipe: ")
 		fmt.Scan(&edit)
@@ -459,39 +499,63 @@ func editRecipe(menu *tabMenu, index *int) {
 
 	edit -= 1
 
-	fmt.Println("Choose what to edit")
+	fmt.Println("Choose what to edit:")
 	fmt.Printf("1. Name\n2. Main Ingredient\n3. Region\n4. Ingredients\n5. Steps\n6. Duration\n7. Difficulty\n8. Rating\n0. Back\n")
-	fmt.Print("Choose option: ")
-	fmt.Scan(&option)
+
+	option = inputRange("0", "8")
 
 	switch option {
-	case 1:
-		fmt.Print("New Name: ")
+	case "1":
+		fmt.Printf("\nInput string. Type ( . ) to end")
+		fmt.Printf("\nNew Name: ")
 		menu[edit].name = inputString()
-	case 2:
-		fmt.Print("New Main Ingredient: ")
-		fmt.Scan(&menu[edit].mainIngredient)
-	case 3:
-		fmt.Print("New Region: ")
-		fmt.Scan(&menu[edit].region)
-	case 4:
+	case "2":
+		fmt.Printf("\nInput string. Type ( . ) to end")
+		fmt.Printf("\nNew Main Ingredient: ")
+		menu[edit].mainIngredient = inputString()
+	case "3":
+		fmt.Printf("\nInput string. Type ( . ) to end")
+		fmt.Printf("\nNew Region: ")
+		menu[edit].region = inputString()
+	case "4":
 		menu[edit].ingredients = [999]string{}
 		menu[edit].ingredientsCount = 0
 		addIngredients(menu, &edit)
 		countIngredients(menu, &edit)
-	case 5:
+	case "5":
 		menu[edit].steps = [999]string{}
 		addSteps(menu, &edit)
-	case 6:
-		fmt.Print("New Duration: ")
+	case "6":
+
+		menu[edit].duration = -1
+
+		for menu[edit].duration <= 0 {
+			fmt.Printf("\nInput Integer.")
+			fmt.Printf("\nRecipe's Cook New Duration (minutes) : ")
+			fmt.Scan(&menu[edit].duration)
+
+			if menu[edit].duration <= 0 {
+				fmt.Println("Duration must be greater than 0.")
+				fmt.Println()
+			}
+		}
+
 		fmt.Scan(&menu[edit].duration)
-	case 7:
-		fmt.Print("New Difficulty: ")
-		fmt.Scan(&menu[edit].difficulty)
-	case 8:
-		fmt.Print("New Rating: ")
-		fmt.Scan(&menu[edit].rating)
-	case 0:
+	case "7":
+		fmt.Print("Recipe's New Difficulty: ")
+		menu[edit].difficulty = chooseDifficulty()
+	case "8":
+		menu[edit].rating = -1
+		for menu[edit].rating < 0 || menu[edit].rating > 5 {
+			fmt.Printf("\nInput Real Numbers.")
+			fmt.Printf("\nRecipe's Rating (0-5): ")
+			fmt.Scan(&menu[edit].rating)
+
+			if menu[edit].rating <= 0 && menu[edit].rating >= 5 {
+				fmt.Printf("\nRating must be between 0 and 5.")
+			}
+		}
+	case "0":
 	default:
 		fmt.Print("Please input 0-8")
 		editRecipe(menu, index)
@@ -500,6 +564,7 @@ func editRecipe(menu *tabMenu, index *int) {
 	mainMenu(menu, index)
 }
 
+// Mnghapus resep
 func deleteRecipe(menu *tabMenu, index *int) {
 	var deleteIndex int
 
@@ -535,6 +600,7 @@ func deleteRecipe(menu *tabMenu, index *int) {
 	mainMenu(menu, index)
 }
 
+// Menampilkan seluruh resep
 func viewAll(menu *tabMenu, index *int) {
 	fmt.Printf("\n| No | Name                   | Main Ingredient | Region     | Ingredients     | Ingredients Count | Steps                         | Duration | Difficulty     | Rating |\n")
 	for i := 0; i < *index; i++ {
@@ -543,6 +609,7 @@ func viewAll(menu *tabMenu, index *int) {
 	}
 }
 
+// Menambah isi array resep
 func addTemplateRecipe(menu *tabMenu) {
 	menu[0] = recipe{
 		name:             "Nasi Goreng",
@@ -820,6 +887,7 @@ func addTemplateRecipe(menu *tabMenu) {
 	}
 }
 
+// Menampilkan ingredients dan steps
 func printIngredientsAndSteps(menu *tabMenu, index int) {
 	for i := 1; menu[index].steps[i] != "" || menu[index].ingredients[i] != ""; i++ {
 		fmt.Printf(" %-61s %-17s %-19s %-31s\n", "", menu[index].ingredients[i], "", menu[index].steps[i])

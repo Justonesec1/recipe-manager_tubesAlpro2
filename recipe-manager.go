@@ -75,7 +75,7 @@ func viewMenu(menu *tabMenu, index *int) {
 	var input string
 
 	fmt.Printf("\nView Menu\n")
-	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search by Main Ingredient\n0. Back\n")
+	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search Menu\n0. Back\n")
 
 	input = inputRange("0", "3")
 
@@ -93,8 +93,7 @@ func viewMenu(menu *tabMenu, index *int) {
 	case "2":
 		sortMenu(menu, index)
 	case "3":
-		searchByMainIngredient(menu, index)
-		viewMenu(menu, index)
+		searchMenu(menu, index)
 	case "0":
 		mainMenu(menu, index)
 	default:
@@ -453,7 +452,31 @@ func countIngredients(menu *tabMenu, index *int) {
 	}
 }
 
+func searchMenu(menu *tabMenu, index *int) {
+	var input string
+
+	fmt.Printf("\nSearch Menu\n")
+	fmt.Printf("1. Search by Main Ingredient \n2. Search by Rating \n0. Back\n")
+
+	input = inputRange("0", "2")
+
+	switch input {
+	case "1":
+		searchByMainIngredient(menu, index)
+		searchMenu(menu, index)
+	case "2":
+		searchByRating(menu, index)
+		searchMenu(menu, index)
+	case "0":
+		mainMenu(menu, index)
+	default:
+		fmt.Println("Please input 0-2")
+		mainMenu(menu, index)
+	}
+}
+
 // Fungsi Mencari
+// Sequential Search
 func searchByMainIngredient(menu *tabMenu, index *int) {
 	var ingredient string
 	var found bool
@@ -510,6 +533,79 @@ func showAvailableIngredients(menu *tabMenu, index *int) {
 		if !found {
 			count++
 			fmt.Printf("%d. %s\n", count, menu[i].mainIngredient)
+		}
+	}
+}
+
+// Binary Search
+func searchByRating(menu *tabMenu, index *int) {
+	var left, mid, right int
+	var rating float64
+	var found bool = false
+
+	showAvailableRatings(menu, index)
+
+	sortByRating(menu)
+
+	left = 0
+	right = (*index) - 1
+
+	fmt.Print("\nInput Main Rating: ")
+	fmt.Scan(&rating)
+
+	for left <= right && !found {
+		mid = (left + right) / 2
+
+		if rating == menu[mid].rating {
+
+			found = true
+
+			fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n",
+				mid+1,
+				menu[mid].name,
+				menu[mid].mainIngredient,
+				menu[mid].region,
+				menu[mid].ingredients[0],
+				menu[mid].ingredientsCount,
+				menu[mid].steps[0],
+				menu[mid].duration,
+				menu[mid].difficulty,
+				menu[mid].rating)
+
+			printIngredientsAndSteps(menu, mid)
+		} else if rating > menu[mid].rating {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+
+	}
+
+	if !found {
+		fmt.Println("No recipes found with that rating.")
+	}
+
+}
+
+func showAvailableRatings(menu *tabMenu, index *int) {
+	var found bool
+	var count int
+
+	fmt.Println("\nAvailable Ratings:")
+
+	for i := 0; i < *index; i++ {
+
+		found = false
+
+		for j := 0; j < i; j++ {
+			if menu[i].rating == menu[j].rating {
+				found = true
+			}
+		}
+
+		if !found {
+			count++
+			fmt.Printf("%d. %.2f\n", count, menu[i].rating)
 		}
 	}
 }

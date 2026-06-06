@@ -108,9 +108,9 @@ func sortMenu(menu *tabMenu, index *int) {
 	var input string
 
 	fmt.Printf("\nSort Menu\n")
-	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n6. Sort by Main Ingredient \n0. Back\n")
+	fmt.Printf("1. Sort by Name \n2. Sort by Duration \n3. Sort by Rating \n4. Sort by Difficulty \n5. Sort by Region \n6. Sort by Main Ingredient \n7. Reverse Menu Order\n0. Back\n")
 
-	input = inputRange("0", "6")
+	input = inputRange("0", "7")
 
 	switch input {
 	case "1":
@@ -137,10 +137,14 @@ func sortMenu(menu *tabMenu, index *int) {
 		sortByMainIngredient(menu)
 		viewAll(menu, index)
 		sortMenu(menu, index)
+	case "7":
+		flipArray(menu, *index)
+		viewAll(menu, index)
+		sortMenu(menu, index)
 	case "0":
 		viewMenu(menu, index)
 	default:
-		fmt.Println("Please input 0-6")
+		fmt.Println("Please input 0-7")
 		sortMenu(menu, index)
 	}
 }
@@ -166,10 +170,10 @@ func sortByName(menu *tabMenu) {
 }
 
 func sortByDuration(menu *tabMenu) {
-	var sortIndex, minIndex int
+	var sortIndex /*, minIndex*/ int
 	var temp recipe
 
-	for sortIndex = 0; menu[sortIndex].duration != 0; sortIndex++ {
+	/*for sortIndex = 0; menu[sortIndex].duration != 0; sortIndex++ {
 		minIndex = sortIndex
 		for i := sortIndex; menu[i].duration != 0; i++ {
 			if menu[i].duration < menu[minIndex].duration {
@@ -180,7 +184,21 @@ func sortByDuration(menu *tabMenu) {
 		temp = menu[sortIndex]
 		menu[sortIndex] = menu[minIndex]
 		menu[minIndex] = temp
+	}*/
+
+	// Insertion Sort
+	for sortIndex = 1; menu[sortIndex].duration != 0; sortIndex++ {
+		i := sortIndex
+
+		for i > 0 && menu[i-1].duration > menu[i].duration {
+			temp = menu[i]
+			menu[i] = menu[i-1]
+			menu[i-1] = temp
+			i--
+		}
+
 	}
+
 }
 
 func sortByRating(menu *tabMenu) {
@@ -277,6 +295,18 @@ func sortByMainIngredient(menu *tabMenu) {
 		temp = menu[sortIndex]
 		menu[sortIndex] = menu[minIndex]
 		menu[minIndex] = temp
+	}
+}
+
+func flipArray(menu *tabMenu, index int) {
+	var flipped tabMenu
+
+	for i := 0; i < index; i++ {
+		flipped[i] = menu[index-1-i]
+	}
+
+	for i := 0; i < index; i++ {
+		menu[i] = flipped[i]
 	}
 }
 

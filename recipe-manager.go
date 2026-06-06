@@ -423,6 +423,7 @@ func countIngredients(menu *tabMenu, index *int) {
 	}
 }
 
+// Fungsi Mencari
 func searchByMainIngredient(menu *tabMenu, index *int) {
 	var ingredient string
 	var found bool
@@ -540,7 +541,6 @@ func editRecipe(menu *tabMenu, index *int) {
 			}
 		}
 
-		fmt.Scan(&menu[edit].duration)
 	case "7":
 		fmt.Print("Recipe's New Difficulty: ")
 		menu[edit].difficulty = chooseDifficulty()
@@ -551,7 +551,7 @@ func editRecipe(menu *tabMenu, index *int) {
 			fmt.Printf("\nRecipe's Rating (0-5): ")
 			fmt.Scan(&menu[edit].rating)
 
-			if menu[edit].rating <= 0 && menu[edit].rating >= 5 {
+			if menu[edit].rating < 0 && menu[edit].rating > 5 {
 				fmt.Printf("\nRating must be between 0 and 5.")
 			}
 		}
@@ -895,6 +895,7 @@ func printIngredientsAndSteps(menu *tabMenu, index int) {
 	fmt.Println("")
 }
 
+// Mendapatkan jumlah resep yang disimpan
 func checkInteger(menu tabMenu) int {
 	var i int
 	for i = 0; menu[i].name != ""; i++ {

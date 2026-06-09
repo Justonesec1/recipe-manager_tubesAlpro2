@@ -471,7 +471,7 @@ func searchMenu(menu *tabMenu, index *int) {
 		mainMenu(menu, index)
 	default:
 		fmt.Println("Please input 0-2")
-		mainMenu(menu, index)
+		viewMenu(menu, index)
 	}
 }
 

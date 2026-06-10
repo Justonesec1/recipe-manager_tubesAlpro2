@@ -75,16 +75,9 @@ func viewMenu(menu *tabMenu, index *int) {
 	var input string
 
 	fmt.Printf("\nView Menu\n")
-	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search Menu\n0. Back\n")
+	fmt.Printf("1. View All Menu\n2. Sort Menu\n3. Search Menu\n4. View Favorites\n0. Back\n")
 
-	input = inputRange("0", "3")
-
-	for input != "0" && input != "1" && input != "2" && input != "3" {
-		fmt.Println("Please input 0-3")
-
-		fmt.Print("Choose Option: ")
-		fmt.Scan(&input)
-	}
+	input = inputRange("0", "4")
 
 	switch input {
 	case "1":
@@ -94,6 +87,9 @@ func viewMenu(menu *tabMenu, index *int) {
 		sortMenu(menu, index)
 	case "3":
 		searchMenu(menu, index)
+	case "4":
+		viewFavorite(menu, index)
+		viewMenu(menu, index)
 	case "0":
 		mainMenu(menu, index)
 	default:
@@ -627,9 +623,9 @@ func editRecipe(menu *tabMenu, index *int) {
 	edit -= 1
 
 	fmt.Println("Choose what to edit:")
-	fmt.Printf("1. Name\n2. Main Ingredient\n3. Region\n4. Ingredients\n5. Steps\n6. Duration\n7. Difficulty\n8. Rating\n0. Back\n")
+	fmt.Printf("1. Name\n2. Main Ingredient\n3. Region\n4. Ingredients\n5. Steps\n6. Duration\n7. Difficulty\n8. Rating\n9. Favorite\n0. Back\n")
 
-	option = inputRange("0", "8")
+	option = inputRange("0", "9")
 
 	switch option {
 	case "1":
@@ -681,6 +677,10 @@ func editRecipe(menu *tabMenu, index *int) {
 				fmt.Printf("\nRating must be between 0 and 5.")
 			}
 		}
+	case "9":
+		fmt.Println("Mark as favorite?")
+		menu[edit].favorite = favorite()
+
 	case "0":
 	default:
 		fmt.Print("Please input 0-8")
@@ -732,6 +732,20 @@ func viewAll(menu *tabMenu, index *int) {
 	for i := 0; i < *index; i++ {
 		fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", i+1, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingredientsCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
 		printIngredientsAndSteps(menu, i)
+	}
+}
+
+// Menampilkan resep favorit
+func viewFavorite(menu *tabMenu, index *int) {
+	var count int = 1
+
+	fmt.Printf("\n| No | Name                   | Main Ingredient | Region     | Ingredients     | Ingredients Count | Steps                         | Duration | Difficulty     | Rating |\n")
+	for i := 0; i < *index; i++ {
+		if menu[i].favorite {
+			fmt.Printf("  %-4d %-24s %-17s %-12s %-17s %-19d %-31s %-10d %-16s %-.2f \n", count, menu[i].name, menu[i].mainIngredient, menu[i].region, menu[i].ingredients[0], menu[i].ingredientsCount, menu[i].steps[0], menu[i].duration, menu[i].difficulty, menu[i].rating)
+			printIngredientsAndSteps(menu, i)
+			count++
+		}
 	}
 }
 
